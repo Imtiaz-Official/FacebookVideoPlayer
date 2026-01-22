@@ -634,7 +634,7 @@ async function tryYtDlpStrategy(facebookUrl, useAuth, strategy) {
         '--retries', '3', // Retry failed requests
         '--fragment-retries', '3', // Retry fragment downloads
         '--skip-unavailable-fragments', // Skip unavailable fragments
-        '--abort-on-unavailable-fragment', 'false', // Don't abort on missing fragments
+        '--no-abort-on-error', // Don't abort on errors
         '--no-check-certificates', // Bypass SSL certificate issues
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         '--referer', 'https://www.facebook.com/', // Add Facebook referer
