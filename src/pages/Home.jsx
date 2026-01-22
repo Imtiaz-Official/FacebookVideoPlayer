@@ -28,19 +28,19 @@ export default function Home() {
       <section className="flex-1 flex items-center justify-center px-4 py-16 sm:py-24">
         <div className="max-w-4xl mx-auto w-full text-center">
           {/* Icon */}
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl shadow-2xl mb-8 relative">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-purple-700 rounded-3xl shadow-2xl mb-8 relative">
             <Video className="w-10 h-10 text-white" />
           </div>
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-950/50 dark:to-blue-950/50 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-full text-sm font-semibold mb-8 border border-purple-200 dark:border-purple-800">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-950/50 dark:to-purple-900/50 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-full text-sm font-semibold mb-8 border border-purple-200 dark:border-purple-700 shadow-sm">
             <Sparkles className="w-4 h-4" />
             HD Video Extraction
           </div>
 
           {/* Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
-            <span className="gradient-text">
+            <span className="bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
               Facebook Video Player
             </span>
           </h1>
@@ -70,6 +70,7 @@ export default function Home() {
                 type="submit"
                 disabled={isProcessing || !url.trim()}
                 className="btn btn-primary h-14 px-8 text-base font-semibold whitespace-nowrap disabled:opacity-50"
+                style={{ minWidth: '180px' }}
               >
                 {isProcessing ? (
                   <>
@@ -90,11 +91,11 @@ export default function Home() {
               <span className="text-gray-500 dark:text-gray-400">Supports:</span>
               <span className="text-purple-600 dark:text-purple-400 font-medium">facebook.com/watch</span>
               <span className="text-gray-300 dark:text-gray-600">•</span>
-              <span className="text-blue-600 dark:text-blue-400 font-medium">fb.watch</span>
+              <span className="text-indigo-600 dark:text-indigo-400 font-medium">fb.watch</span>
               <span className="text-gray-300 dark:text-gray-600">•</span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-medium">videos</span>
+              <span className="text-violet-600 dark:text-violet-400 font-medium">videos</span>
               <span className="text-gray-300 dark:text-gray-600">•</span>
-              <span className="text-pink-600 dark:text-pink-400 font-medium">reels</span>
+              <span className="text-fuchsia-600 dark:text-fuchsia-400 font-medium">reels</span>
             </div>
           </form>
         </div>
@@ -105,7 +106,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           {/* Feature Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="card group hover:border-purple-200 dark:hover:border-purple-800 transition-all">
+            <div className="card group hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
                 <Video className="w-6 h-6 text-white" />
               </div>
@@ -113,15 +114,15 @@ export default function Home() {
               <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Watch videos in 1080p, 720p, or 480p quality with crisp clear audio.</p>
             </div>
 
-            <div className="card group hover:border-green-200 dark:hover:border-green-800 transition-all">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+            <div className="card group hover:shadow-lg transition-all duration-200">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No Ads</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">Clean, distraction-free viewing experience without any interruptions.</p>
             </div>
 
-            <div className="card group hover:border-blue-200 dark:hover:border-blue-800 transition-all">
+            <div className="card group hover:shadow-lg transition-all duration-200">
               <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
                 <Download className="w-6 h-6 text-white" />
               </div>
@@ -132,9 +133,9 @@ export default function Home() {
 
           {/* Secondary Features */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div className="card group hover:border-orange-200 dark:hover:border-orange-800 transition-all">
+            <div className="card group hover:shadow-lg transition-all duration-200">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
                   <Zap className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -144,9 +145,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="card group hover:border-rose-200 dark:hover:border-rose-800 transition-all">
+            <div className="card group hover:shadow-lg transition-all duration-200">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-rose-500 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
                   <Shield className="w-6 h-6 text-white" />
                 </div>
                 <div>

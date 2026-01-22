@@ -31,3 +31,6 @@ facebook-cookies.txt
 *.njsproj
 *.sln
 *.sw?
+
+.vercel
+.env*.local
