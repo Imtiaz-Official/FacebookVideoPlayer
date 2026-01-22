@@ -562,26 +562,99 @@ async function extractTitleWithYtDlp(facebookUrl, useAuth = false) {
  * @param {boolean} useAuth - Whether to use cookies for authentication
  */
 async function extractVideoWithYtDlp(facebookUrl, useAuth = false) {
+  // Try multiple extraction strategies in sequence
+  const strategies = [
+    // Strategy 1: Standard extraction with best format
+    {
+      name: 'standard',
+      format: 'best',
+      playerLocation: 'feed',
+      extraArgs: []
+    },
+    // Strategy 2: Try all formats
+    {
+      name: 'all-formats',
+      format: 'bestvideo+bestaudio/best',
+      playerLocation: 'feed',
+      extraArgs: ['--list-formats']
+    },
+    // Strategy 3: SD video location
+    {
+      name: 'sd-location',
+      format: 'best',
+      playerLocation: '',
+      extraArgs: ['--extractor-args', 'facebook:player_location=timeline']
+    },
+    // Strategy 4: Generic extraction without specific player location
+    {
+      name: 'generic',
+      format: 'best',
+      playerLocation: '',
+      extraArgs: ['--extractor-args', 'facebook:prefer_single_url=True']
+    },
+    // Strategy 5: Last resort - get any video
+    {
+      name: 'worst',
+      format: 'worst',
+      playerLocation: '',
+      extraArgs: []
+    }
+  ];
+
+  for (const strategy of strategies) {
+    const result = await tryYtDlpStrategy(facebookUrl, useAuth, strategy);
+    if (result && result.length > 0) {
+      console.log(`[YtDlp] Strategy "${strategy.name}" succeeded!`);
+      return result;
+    }
+    console.log(`[YtDlp] Strategy "${strategy.name}" failed, trying next...`);
+    // Small delay between attempts to avoid rate limiting
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+
+  console.log('[YtDlp] All strategies failed');
+  return null;
+}
+
+/**
+ * Try a single yt-dlp extraction strategy
+ */
+async function tryYtDlpStrategy(facebookUrl, useAuth, strategy) {
   return new Promise((resolve) => {
     try {
-      console.log(`[YtDlp] Extracting video with yt-dlp (auth: ${useAuth})...`);
+      console.log(`[YtDlp] Trying strategy "${strategy.name}" (format: ${strategy.format})...`);
 
       // Build yt-dlp arguments with enhanced flags for private content
       const args = [
         '--print', 'url',
         '--no-warnings',
-        '--quiet',
-        '--format', 'best',
+        '--flat-playlist', // Don't download, just extract
+        '--no-playlist', // Only get single video
+        '--socket-timeout', '30', // Network timeout
+        '--retries', '3', // Retry failed requests
+        '--fragment-retries', '3', // Retry fragment downloads
+        '--skip-unavailable-fragments', // Skip unavailable fragments
+        '--abort-on-unavailable-fragment', 'false', // Don't abort on missing fragments
         '--no-check-certificates', // Bypass SSL certificate issues
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        '--extractor-args', 'facebook:player_location=feed', // Try feed location first
+        '--referer', 'https://www.facebook.com/', // Add Facebook referer
+        '--add-header', 'Accept-Language:en-US,en;q=0.9', // Add language header
       ];
 
-      // Additional args for private groups
+      // Add format selection
+      args.push('--format', strategy.format);
+
+      // Add player location if specified
+      if (strategy.playerLocation) {
+        args.push('--extractor-args', `facebook:player_location=${strategy.playerLocation}`);
+      }
+
+      // Add any extra args for this strategy
+      args.push(...strategy.extraArgs);
+
+      // Additional args for auth
       if (useAuth) {
         args.push('--cookies', COOKIES_TXT_FILE);
-        args.push('--ignore-errors'); // Continue on download errors
-        args.push('--no-abort-on-error'); // Don't abort on errors
       }
 
       args.push(facebookUrl);
@@ -604,30 +677,38 @@ async function extractVideoWithYtDlp(facebookUrl, useAuth = false) {
         const urls = output.trim().split('\n').filter(u => u.length > 50);
 
         if (code === 0 && urls.length > 0) {
-          console.log(`[YtDlp] Successfully extracted ${urls.length} video URL(s)`);
+          console.log(`[YtDlp-${strategy.name}] Successfully extracted ${urls.length} video URL(s)`);
           urls.forEach(url => {
-            console.log(`[YtDlp] - ${url.substring(0, 80)}...`);
+            console.log(`[YtDlp-${strategy.name}] - ${url.substring(0, 80)}...`);
           });
-          // Return array of video URLs
           resolve(urls);
         } else {
-          console.log(`[YtDlp] Failed to extract video URL (code ${code})`);
+          // Log more details about failure
+          if (stderrOutput) {
+            const relevantError = stderrOutput.split('\n')
+              .filter(l => l.includes('ERROR') || l.includes('HTTP Error') || l.includes('Unsupported'))
+              .slice(0, 3);
+            if (relevantError.length > 0) {
+              console.log(`[YtDlp-${strategy.name}] Failed: ${relevantError.join('; ')}`);
+            }
+          }
+          console.log(`[YtDlp-${strategy.name}] Failed (code ${code})`);
           if (stderrOutput.includes('cookies') || stderrOutput.includes('login')) {
-            console.log(`[YtDlp] Hint: Authentication may be required`);
+            console.log(`[YtDlp-${strategy.name}] Hint: Authentication may be required`);
           }
           resolve(null);
         }
       });
 
-      // Timeout after 60 seconds
+      // Timeout after 45 seconds (reduced from 60s for faster fallback)
       setTimeout(() => {
-        ytDlp.kill();
-        console.log('[YtDlp] Timeout');
+        ytDlp.kill('SIGTERM');
+        console.log(`[YtDlp-${strategy.name}] Timeout after 45s`);
         resolve(null);
-      }, 60000);
+      }, 45000);
 
     } catch (error) {
-      console.log('[YtDlp] Error:', error.message);
+      console.log(`[YtDlp-${strategy.name}] Error:`, error.message);
       resolve(null);
     }
   });
@@ -655,7 +736,8 @@ async function extractFacebookVideoUrl(facebookUrl, useAuth = false) {
 
     // IMPORTANT: Try yt-dlp FIRST (always) - it's faster and more reliable
     // yt-dlp works even without auth for public videos
-    console.log('[Scraper] Trying yt-dlp extraction first (fastest method)...');
+    console.log('[Scraper] Trying yt-dlp extraction with multiple strategies...');
+
     const ytDlpUrls = await extractVideoWithYtDlp(facebookUrl, useAuth);
 
     if (ytDlpUrls && ytDlpUrls.length > 0) {
@@ -678,8 +760,8 @@ async function extractFacebookVideoUrl(facebookUrl, useAuth = false) {
     }
 
     // yt-dlp failed - throw error (no Puppeteer fallback on Render)
-    console.log('[Scraper] yt-dlp extraction failed.');
-    throw new Error('Could not extract video. The video may be private, deleted, or requires authentication.');
+    console.log('[Scraper] yt-dlp extraction failed after retries.');
+    throw new Error('Could not extract video. This video may be private, deleted, or requires authentication.');
 
     // ⚡ OPTIMIZATION: Get browser from pool instead of creating new one
     // DISABLED: Browser pooling causing detachment issues, using fresh browser each time
