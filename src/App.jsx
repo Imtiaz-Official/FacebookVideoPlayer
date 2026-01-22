@@ -3656,95 +3656,102 @@ export default function App({ initialUrl, playerMode = false }) {
                     </div>
                   </>
                 ) : isExtracting ? (
-                  <div className="aspect-video bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900 flex items-center justify-center relative overflow-hidden">
-                    {/* Animated background pattern */}
-                    <div className="absolute inset-0 opacity-10">
-                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 animate-pulse" />
+                  <div className="aspect-video bg-gradient-to-br from-gray-950 via-slate-950 to-purple-950 flex items-center justify-center relative overflow-hidden">
+                    {/* Animated background orbs */}
+                    <div className="absolute inset-0 overflow-hidden">
+                      <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl animate-pulse-slow"></div>
+                      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
                     </div>
 
-                    <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg px-4">
-                      {/* Progress Ring - Smaller on mobile */}
-                      <div className="mb-4 sm:mb-6">
+                    <div className="relative z-10 flex flex-col items-center justify-center w-full max-w-md px-6">
+                      {/* Progress Ring */}
+                      <div className="mb-8">
                         <div className="relative">
-                          <svg className="w-20 h-20 sm:w-32 sm:h-32 transform -rotate-90">
+                          <svg className="w-28 h-28 sm:w-36 sm:h-36 transform -rotate-90">
                             <circle
-                              cx="40"
-                              cy="40"
-                              r="36"
+                              cx="56"
+                              cy="56"
+                              r="48"
                               stroke="currentColor"
-                              strokeWidth="6"
-                              className="text-gray-700"
+                              strokeWidth="8"
+                              className="text-gray-800"
                               fill="none"
                             />
                             <circle
-                              cx="40"
-                              cy="40"
-                              r="36"
+                              cx="56"
+                              cy="56"
+                              r="48"
                               stroke="url(#gradient)"
-                              strokeWidth="6"
+                              strokeWidth="8"
                               fill="none"
-                              strokeDasharray={`${2 * Math.PI * 36}`}
-                              strokeDashoffset={`${2 * Math.PI * 36 * (1 - (extractionProgress?.percentage || 30) / 100)}`}
+                              strokeDasharray={`${2 * Math.PI * 48}`}
+                              strokeDashoffset={`${2 * Math.PI * 48 * (1 - (extractionProgress?.percentage || 30) / 100)}`}
                               strokeLinecap="round"
                               className="transition-all duration-500 ease-out"
                             />
                             <defs>
                               <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#6366f1" />
-                                <stop offset="50%" stopColor="#8b5cf6" />
-                                <stop offset="100%" stopColor="#ec4899" />
+                                <stop offset="0%" stopColor="rgb(147, 51, 234)" />
+                                <stop offset="50%" stopColor="rgb(59, 130, 246)" />
+                                <stop offset="100%" stopColor="rgb(147, 51, 234)" />
                               </linearGradient>
                             </defs>
                           </svg>
                           <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-xl sm:text-3xl font-bold text-white">{extractionProgress?.percentage || 30}%</span>
+                            <span className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                              {extractionProgress?.percentage || 30}%
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Current Step - Smaller text on mobile */}
-                      <div className="text-center mb-3 sm:mb-6 max-w-md">
-                        <h3 className="text-base sm:text-xl font-bold text-white mb-1 sm:mb-2 animate-pulse">
+                      {/* Current Step */}
+                      <div className="text-center mb-8">
+                        <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
                           {extractionProgress?.step || 'Initializing...'}
                         </h3>
-                        <p className="text-xs sm:text-sm text-gray-400">
+                        <p className="text-sm text-gray-400">
                           {extractionProgress?.detail || 'Connecting to Facebook servers...'}
                         </p>
                       </div>
 
-                      {/* Progress Steps - More compact on mobile */}
-                      <div className="space-y-1.5 sm:space-y-2 max-w-md w-full">
+                      {/* Progress Steps */}
+                      <div className="w-full max-w-sm space-y-3">
                         {[
                           { icon: '🌐', label: 'Connecting', done: true },
-                          { icon: '🔍', label: 'Analyzing', done: (extractionProgress?.percentage || 30) > 20 },
-                          { icon: '⬇️', label: 'Extracting', done: (extractionProgress?.percentage || 30) > 50 },
-                          { icon: '✨', label: 'Processing', done: (extractionProgress?.percentage || 30) > 80 },
+                          { icon: '🔍', label: 'Analyzing', done: (extractionProgress?.percentage || 30) > 25 },
+                          { icon: '⬇️', label: 'Extracting', done: (extractionProgress?.percentage || 30) > 60 },
+                          { icon: '✨', label: 'Processing', done: (extractionProgress?.percentage || 30) > 85 },
                         ].map((step, i) => (
                           <div
                             key={i}
-                            className={`flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg sm:rounded-xl transition-all duration-300 ${
+                            className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 ${
                               step.done
-                                ? 'bg-gradient-to-r from-indigo-600/20 to-purple-600/20 border border-indigo-500/30'
-                                : i === Math.floor(((extractionProgress?.percentage || 30) / 100) * 4)
-                                ? 'bg-gray-700/50 border border-indigo-500/50 animate-pulse'
+                                ? 'bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/30'
+                                : i === Math.floor(((extractionProgress?.percentage || 30) / 100) * 3.9)
+                                ? 'bg-gray-800/50 border border-purple-500/50 shadow-lg shadow-purple-500/10'
                                 : 'bg-gray-800/30 border border-gray-700'
                             }`}
                           >
-                            <span className="text-base sm:text-xl">{step.icon}</span>
+                            <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-base sm:text-lg flex-shrink-0 transition-colors ${
+                              step.done ? 'bg-gradient-to-br from-purple-500 to-blue-500' : 'bg-gray-700'
+                            }`}>
+                              {step.icon}
+                            </div>
                             <div className="flex-1 min-w-0">
-                              <p className={`text-xs sm:text-sm font-medium truncate ${step.done ? 'text-indigo-400' : 'text-gray-400'}`}>
+                              <p className={`text-sm font-medium ${step.done ? 'text-purple-400' : 'text-gray-400'}`}>
                                 {step.label}
                               </p>
                             </div>
                             {step.done && (
-                              <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center flex-shrink-0">
-                                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                              <div className="w-5 h-5 sm:w-6 sm:h-6 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
                               </div>
                             )}
-                            {!step.done && i === Math.floor(((extractionProgress?.percentage || 30) / 100) * 4) && (
-                              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                            {!step.done && i === Math.floor(((extractionProgress?.percentage || 30) / 100) * 3.9) && (
+                              <div className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-purple-500 border-t-transparent rounded-full animate-spin flex-shrink-0"></div>
                             )}
                           </div>
                         ))}
@@ -3752,63 +3759,29 @@ export default function App({ initialUrl, playerMode = false }) {
                     </div>
                   </div>
                 ) : (
-                  <div className={`aspect-video flex items-center justify-center p-8 ${darkMode ? 'bg-gradient-to-br from-gray-900 via-slate-900 to-gray-900' : 'bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50'}`}>
+                  <div className="aspect-video bg-gradient-to-br from-gray-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-purple-950 flex items-center justify-center p-8">
                     <div className="text-center max-w-md">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 flex items-center justify-center mx-auto mb-6 shadow-xl shadow-indigo-500/30">
-                        <Download className="w-10 h-10 text-white" />
+                      {/* Icon */}
+                      <div className="w-20 h-20 mx-auto mb-6 relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl blur-xl opacity-30"></div>
+                        <div className="relative w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl">
+                          <Download className="w-10 h-10 text-white" />
+                        </div>
                       </div>
+
                       <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Extract Video</h3>
-                      <p className={`text-sm mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                      <p className={`text-sm mb-6 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
                         Click the button below to extract and play this Facebook video in HD quality.
                       </p>
-
-                      {/* Auth Section */}
-                      <div className={`mb-4 p-4 rounded-xl ${darkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-2 h-2 rounded-full ${isAuthenticated ? 'bg-green-500' : 'bg-gray-400'}`}></div>
-                            <span className={`text-sm font-medium ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                              {isAuthenticated ? 'Facebook Connected' : 'Not Connected'}
-                            </span>
-                          </div>
-                          {isAuthenticated ? (
-                            <button
-                              onClick={handleLogout}
-                              className="text-xs px-3 py-1.5 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-lg transition"
-                            >
-                              Logout
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => setShowLoginModal(true)}
-                              className="text-xs px-3 py-1.5 bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20 rounded-lg transition"
-                            >
-                              Login
-                            </button>
-                          )}
-                        </div>
-                        <label className="flex items-center gap-3 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={useAuthMode}
-                            onChange={(e) => setUseAuthMode(e.target.checked)}
-                            disabled={!isAuthenticated}
-                            className="w-4 h-4 rounded border-gray-500 text-indigo-500 focus:ring-indigo-500 disabled:opacity-50"
-                          />
-                          <span className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-                            Use authentication for private videos
-                          </span>
-                        </label>
-                      </div>
 
                       <button
                         onClick={extractAndPlayVideo}
                         disabled={isExtracting}
-                        className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-indigo-600 text-white font-semibold py-4 px-8 rounded-xl transition duration-200 shadow-xl shadow-indigo-500/30 inline-flex items-center gap-3 text-lg hover:scale-105 transform"
+                        className="btn btn-primary text-base py-4 px-8 shadow-xl"
                       >
                         {isExtracting ? (
                           <>
-                            <Loader className="w-5 h-5 animate-spin" />
+                            <div className="spinner" />
                             Extracting...
                           </>
                         ) : (
