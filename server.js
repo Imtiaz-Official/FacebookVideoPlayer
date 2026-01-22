@@ -18,7 +18,10 @@ const app = express();
 const PORT = 3001;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: ['https://facebook-video-player-nu.vercel.app', 'https://facebook-video-player.vercel.app', 'http://localhost:5173'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Cookie storage files
