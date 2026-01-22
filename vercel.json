@@ -18,13 +18,17 @@
       }
     },
     {
-      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|webp))",
+      "src": "/(.*\\.(png|jpg|jpeg|gif|svg|ico|webp|js|css))",
       "headers": {
         "cache-control": "public, max-age=31536000, immutable"
       }
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_API_BASE_URL": "@api_base_url"
-  }
+  ]
 }
