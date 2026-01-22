@@ -19,7 +19,7 @@ const PORT = 3001;
 
 // Middleware
 app.use(cors({
-  origin: ['https://facebook-video-player-nu.vercel.app', 'https://facebook-video-player.vercel.app', 'http://localhost:5173'],
+  origin: '*',
   credentials: true
 }));
 app.use(express.json());
