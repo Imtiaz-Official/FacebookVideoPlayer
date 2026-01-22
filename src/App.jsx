@@ -301,8 +301,14 @@ export default function App({ initialUrl, playerMode = false }) {
     localStorage.setItem('showFormatsMobile', showFormatsMobile.toString());
   }, [showFormatsMobile]);
 
-  // Helper function to get backend URL (works on both localhost and network)
+  // Helper function to get backend URL
   const getBackendUrl = () => {
+    // Check for environment variable first (for Vercel deployment)
+    if (import.meta.env.VITE_API_BASE_URL) {
+      return import.meta.env.VITE_API_BASE_URL;
+    }
+
+    // Fallback for local development
     const hostname = window.location.hostname;
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
       return 'http://localhost:3001';
