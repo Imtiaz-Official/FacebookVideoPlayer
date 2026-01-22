@@ -2,7 +2,7 @@ services:
   - type: web
     name: facebook-video-player-api
     env: node
-    buildCommand: pip install yt-dlp && npm install
+    buildCommand: npm install && curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp
     startCommand: node server.js
     envVars:
       - key: NODE_VERSION
