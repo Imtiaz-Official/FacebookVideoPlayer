@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Facebook Embed Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .embed-container {
+            margin: 20px 0;
+            border: 2px solid #ccc;
+            padding: 10px;
+        }
+        h2 { color: #333; }
+        .url-box {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            word-break: break-all;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Facebook Embed Test (No SDK)</h1>
+
+    <div class="embed-container">
+        <h2>Test 1: Your Watch URL (converted to Reel format)</h2>
+        <div class="url-box">
+            https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=true&width=560&t=0
+        </div>
+        <iframe
+            src="https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=true&width=560&t=0"
+            width="560"
+            height="535"
+            style="border:none;overflow:hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowFullScreen="true">
+        </iframe>
+    </div>
+
+    <div class="embed-container">
+        <h2>Test 2: Official Facebook Reel Embed</h2>
+        <div class="url-box">
+            https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=true&width=560&t=0
+        </div>
+        <iframe
+            src="https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=true&width=560&t=0"
+            width="560"
+            height="535"
+            style="border:none;overflow:hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowFullScreen="true">
+        </iframe>
+    </div>
+
+    <div class="embed-container">
+        <h2>Test 3: Without show_text</h2>
+        <div class="url-box">
+            https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=false&width=560&t=0
+        </div>
+        <iframe
+            src="https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F799186379839725%2F&show_text=false&width=560&t=0"
+            width="560"
+            height="535"
+            style="border:none;overflow:hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowFullScreen="true">
+        </iframe>
+    </div>
+
+    <div class="embed-container">
+        <h2>Test 4: Using original watch URL</h2>
+        <div class="url-box">
+            https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D799186379839725&show_text=true&width=560&t=0
+        </div>
+        <iframe
+            src="https://www.facebook.com/plugins/video.php?height=420&href=https%3A%2F%2Fwww.facebook.com%2Fwatch%2F%3Fv%3D799186379839725&show_text=true&width=560&t=0"
+            width="560"
+            height="535"
+            style="border:none;overflow:hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+            allowFullScreen="true">
+        </iframe>
+    </div>
+
+    <p><strong>Instructions:</strong> If ANY of these work, tell me which one. If NONE work, then Facebook has blocked embedding for this video.</p>
+</body>
+</html>

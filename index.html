@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Cache Control for Development -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#1877f2" />
+    <meta name="description" content="Watch and download Facebook videos with a powerful player. Support for HD quality, playlists, and offline viewing." />
+    <meta name="keywords" content="facebook, video, player, downloader, hd, reels, watch" />
+    <meta name="author" content="FB Video Player" />
+    <meta property="og:title" content="FB Video Player" />
+    <meta property="og:description" content="Watch and download Facebook videos with a powerful player" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="FB Video Player" />
+    <meta name="twitter:description" content="Watch and download Facebook videos with a powerful player" />
+    <title>FB Video Player</title>
+    <style>
+      * {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      body {
+        overscroll-behavior: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Clear all caches and unregister service workers for development
+      async function clearAllCachesAndSW() {
+        try {
+          // Clear all caches
+          const cacheNames = await caches.keys();
+          await Promise.all(cacheNames.map(name => caches.delete(name)));
+          console.log('✅ All caches cleared');
+
+          // Unregister all service workers
+          if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(reg => reg.unregister()));
+            console.log('✅ All service workers unregistered');
+          }
+        } catch (error) {
+          console.error('Error clearing caches/SW:', error);
+        }
+      }
+
+      // Run on load for development
+      window.addEventListener('load', async () => {
+        // Clear everything on first load
+        await clearAllCachesAndSW();
+        
+        // Then register fresh service worker
+        if ('serviceWorker' in navigator) {
+          try {
+            const registration = await navigator.serviceWorker.register('/sw.js');
+            console.log('✅ Fresh SW registered:', registration);
+          } catch (error) {
+            console.log('❌ SW registration failed:', error);
+          }
+        }
+      });
+
+      // Safe area insets for mobile
+      const setCSSVar = () => {
+        const safeAreaTop = getComputedStyle(document.documentElement).getPropertyValue('safe-area-inset-top');
+        document.documentElement.style.setProperty('--safe-area-top', safeAreaTop);
+      };
+      window.addEventListener('resize', setCSSVar);
+      setCSSVar();
+    </script>
+  </body>
+</html>
