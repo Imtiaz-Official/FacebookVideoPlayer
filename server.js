@@ -660,9 +660,9 @@ async function extractFacebookVideoUrl(facebookUrl, useAuth = false) {
 
     if (ytDlpUrls && ytDlpUrls.length > 0) {
       // yt-dlp succeeded! Return the URLs directly
-      console.log('[Scraper] yt-dlp extraction successful! Skipping Puppeteer scraping.');
+      console.log('[Scraper] yt-dlp extraction successful!');
       const title = await extractTitleWithYtDlp(facebookUrl, useAuth) || 'Facebook Video';
-      
+
       return {
         success: true,
         title: title,
@@ -676,7 +676,10 @@ async function extractFacebookVideoUrl(facebookUrl, useAuth = false) {
         }))
       };
     }
-    console.log('[Scraper] yt-dlp extraction failed, falling back to Puppeteer...');
+
+    // yt-dlp failed - throw error (no Puppeteer fallback on Render)
+    console.log('[Scraper] yt-dlp extraction failed.');
+    throw new Error('Could not extract video. The video may be private, deleted, or requires authentication.');
 
     // ⚡ OPTIMIZATION: Get browser from pool instead of creating new one
     // DISABLED: Browser pooling causing detachment issues, using fresh browser each time
