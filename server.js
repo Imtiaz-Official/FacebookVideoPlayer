@@ -16,6 +16,7 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const PORT = 3001;
+const YTDLP_PATH = process.env.YTDLP_PATH || '/tmp/yt-dlp';
 
 // Middleware
 app.use(cors({
@@ -509,7 +510,7 @@ async function extractTitleWithYtDlp(facebookUrl, useAuth = false) {
       args.push(facebookUrl);
 
       // Try yt-dlp
-      const ytDlp = spawn('yt-dlp', args);
+      const ytDlp = spawn(YTDLP_PATH, args);
 
       let output = '';
       let stderrOutput = '';
@@ -586,7 +587,7 @@ async function extractVideoWithYtDlp(facebookUrl, useAuth = false) {
       args.push(facebookUrl);
 
       // Try yt-dlp
-      const ytDlp = spawn('yt-dlp', args);
+      const ytDlp = spawn(YTDLP_PATH, args);
 
       let output = '';
       let stderrOutput = '';
@@ -1334,8 +1335,23 @@ app.get('/api/download', async (req, res) => {
   }
 });
 
-// Initialize: Load saved cookies on startup
+// Initialize: Load saved cookies and download yt-dlp on startup
 (async () => {
+  // Download yt-dlp if not available
+  const { execSync } = await import('child_process');
+  try {
+    execSync('which yt-dlp', { stdio: 'ignore' });
+    console.log('[Setup] yt-dlp is already installed');
+  } catch {
+    console.log('[Setup] yt-dlp not found, downloading...');
+    try {
+      execSync('curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /tmp/yt-dlp && chmod a+rx /tmp/yt-dlp', { stdio: 'inherit' });
+      console.log('[Setup] yt-dlp downloaded successfully');
+    } catch (err) {
+      console.error('[Setup] Failed to download yt-dlp:', err.message);
+    }
+  }
+
   const cookies = await loadCookies();
   if (cookies && cookies.find(c => c.name === 'c_user')) {
     savedCookies = cookies;
