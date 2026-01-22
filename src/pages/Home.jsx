@@ -29,8 +29,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto w-full text-center">
           {/* Icon */}
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl shadow-2xl mb-8 relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl blur-2xl opacity-40 animate-pulse"></div>
-            <Video className="w-10 h-10 text-white relative z-10" />
+            <Video className="w-10 h-10 text-white" />
           </div>
 
           {/* Badge */}
@@ -41,7 +40,7 @@ export default function Home() {
 
           {/* Heading */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer">
+            <span className="gradient-text">
               Facebook Video Player
             </span>
           </h1>
